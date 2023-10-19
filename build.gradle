@@ -5,7 +5,7 @@ buildscript {
 		}
 		mavenCentral()
 		maven {
-			url 'http://oss.sonatype.org/content/repositories/snapshots/'
+			url 'https://oss.sonatype.org/content/repositories/snapshots/'
 //			allowInsecureProtocol = true
 		}
 		maven {
@@ -18,10 +18,8 @@ buildscript {
 		classpath 'org.standardout:gradle-versioneye-plugin:1.1.1'
 		classpath 'zipdiff:zipdiff:0.4'
 		classpath 'org.codehaus.groovy:groovy-backports-compat23:2.3+'
-		// when upgrading to newer gradle, 'osgi' plugin will not be available so uncomment below
-		// https://plugins.gradle.org/plugin/biz.aQute.bnd.workspace
-//		classpath "biz.aQute.bnd:biz.aQute.bnd.gradle:6.3.1"
-	}
+		classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:7.0.0'	
+}
 	configurations.all {
 		// ensure SNAPSHOTs are updated every time if needed
 		resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
@@ -142,7 +140,6 @@ include {
 	}
 
 	// HALE specific modules
-
 	from 'modules/schemacrawler.gradle'
 	from 'modules/groovy-sandbox'
 	from 'modules/zest' // Zest 2 Snapshot - TODO instead use official release
@@ -227,6 +224,7 @@ platform {
 
 	// uncomment and update with eclipse directory only during development
 	// eclipseHome = new File('/Users/kapil/eclipse/eclipse-4.24-rcp-for-hale-studio-java17/Eclipse-for-hale-studio-5.0.0.app/Contents/Eclipse')
+	eclipseHome = new File('C:/Users/EmanuelaEpure/Downloads/eclipse-rcp-2022-06-R-win32-x86_64/eclipse')
 	// override behavior for all bundles to prevent package uses conflicts for packages provided by the JRE
 	override {
 		// ensure javax.annotation imports are w/o version
@@ -760,7 +758,8 @@ dependencies {
 subprojects { subproject ->
   if (subproject.parent?.name == "jaxb") {
 	apply plugin: 'java'
-	apply plugin: 'osgi'
+	//apply plugin: 'osgi'
+	apply plugin: 'biz.aQute.bnd.builder'
 
 	repositories {
 	  maven { // wetransform artifactory
@@ -815,7 +814,8 @@ subprojects { subproject ->
 	// package source into a jar file
 	task packageSources(type: Jar, dependsOn: 'xjc') {
 		from sourceSets.main.allSource
-		classifier = 'sources'
+		//classifier = 'sources'
+		archiveClassifier = 'sources'
 	}
 
 	tasks.xjc.dependsOn('cleanSrc')
@@ -1032,5 +1032,5 @@ updateSites.each { name, siteUrl ->
 }
 
 wrapper {
-    gradleVersion = '4.10.2'
+    gradleVersion = '7.3'
 }

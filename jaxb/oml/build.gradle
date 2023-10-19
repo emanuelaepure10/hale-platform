@@ -8,10 +8,12 @@ dependencies {
 	implementation 'com.sun.xml.bind:jaxb-impl:4.0.0'
 }
 
-jar {
-	// OSGi manifest
+task myJar(type: Jar) {
+	from 'eu.esdihumboldt.hale.io.oml.model.jaxb'  // Set the source directory
 	manifest {
-		name = 'Ontology Mapping Language Model'
-		symbolicName = 'eu.esdihumboldt.hale.io.oml.model.jaxb'
+		attributes(
+			'Bundle-Name': 'Ontology Mapping Language Model',
+			'Bundle-SymbolicName': 'eu.esdihumboldt.hale.io.oml.model.jaxb'
+		)
 	}
 }
